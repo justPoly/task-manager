@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks, createTask } from "../services/taskService";
+import { getTasks, createTask, deleteTask, } from "../services/taskService";
 
 function Dashboard() {
     const [tasks, setTasks] = useState([]);
@@ -63,6 +63,38 @@ function Dashboard() {
             console.error(err);
             alert("Unable to create task.");
         }
+    };
+
+    const handleDelete = async (id) => {
+
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this task?"
+    );
+
+    if (!confirmDelete) return;
+        try {
+
+            await deleteTask(id);
+
+            // Refresh task list
+            await loadTasks();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to delete task.");
+
+        }
+
+    };
+
+    const handleEdit = (task) => {
+
+        console.log(task);
+
+        alert("Edit feature coming next!");
+
     };
 
     if (loading) {
@@ -135,10 +167,7 @@ function Dashboard() {
                 <p>No tasks found.</p>
             ) : (
                 tasks.map((task) => (
-                    <div
-                        key={task._id}
-                        className="task-card"
-                    >
+                    <div key={task._id} className="task-card" >
                         <h3>{task.title}</h3>
 
                         <p>{task.description}</p>
@@ -157,6 +186,24 @@ function Dashboard() {
                                 ? new Date(task.dueDate).toLocaleDateString()
                                 : "N/A"}
                         </p>
+
+                        <div className="task-actions">
+
+                            <button
+                                className="edit-btn"
+                                onClick={() => handleEdit(task)}
+                            >
+                                ✏️ Edit
+                            </button>
+
+                            <button
+                                className="delete-btn"
+                                onClick={() => handleDelete(task._id)}
+                            >
+                                🗑 Delete
+                            </button>
+
+                        </div>
 
                     </div>
                 ))
