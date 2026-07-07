@@ -61,7 +61,7 @@ This project was developed as part of the Lead Web Praxis Technical Assessment.
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/task-manager.git
+git clone https://github.com/justPoly/task-manager.git
 ```
 
 ```
@@ -172,8 +172,8 @@ Body
 
 ```json
 {
-    "name":"John Doe",
-    "email":"john@example.com",
+    "name":"Poly Atal",
+    "email":"poly@example.com",
     "password":"Password123"
 }
 ```
