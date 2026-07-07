@@ -63,10 +63,35 @@ const getTasks = async (req, res) => {
 };
 
 const getTask = async (req, res) => {
-    res.json({
-        success: true,
-        message: "Get Single Task Endpoint"
-    });
+    try {
+
+        const task = await Task.findOne({
+            _id: req.params.id,
+            owner: req.user.id
+        });
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: task
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
 };
 
 const updateTask = async (req, res) => {
