@@ -40,9 +40,26 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
 
-        const tasks = await Task.find({
+        const { status, priority } = req.query;
+
+        // Always start by filtering tasks that belong to the logged-in user
+        const filter = {
             owner: req.user.id
-        }).sort({ createdAt: -1 });
+        };
+
+        // Add optional status filter
+        if (status) {
+            filter.status = status;
+        }
+
+        // Add optional priority filter
+        if (priority) {
+            filter.priority = priority;
+        }
+
+        const tasks = await Task.find(filter).sort({
+            createdAt: -1
+        });
 
         res.status(200).json({
             success: true,
