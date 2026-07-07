@@ -1,8 +1,8 @@
 # Task Management System
 
-A full-stack Task Management application built with **Node.js**, **Express**, **MongoDB Atlas**, **React (Vite)**, and **JWT Authentication**.
+A full-stack Task Management application built with **React**, **Node.js**, **Express**, **MongoDB Atlas**, and **JWT Authentication**.
 
-This project was developed as part of the Lead Web Praxis Technical Assessment.
+This project was developed as part of the **Lead Web Praxis Technical Assessment**. It enables authenticated users to securely manage their personal tasks through a RESTful API and an intuitive React frontend.
 
 ---
 
@@ -10,31 +10,33 @@ This project was developed as part of the Lead Web Praxis Technical Assessment.
 
 ### Authentication
 
-- User Registration
-- User Login
-- JWT Authentication
-- Protected Routes
-- Logout
+- User registration
+- Secure user login
+- JWT-based authentication
+- Protected API routes
+- Logout functionality
 
 ### Task Management
 
-- Create Task
-- View Tasks
-- Update Task
-- Delete Task
-- Filter by Status
-- Filter by Priority
+- Create tasks
+- View all personal tasks
+- View a single task
+- Update existing tasks
+- Delete tasks
+- Filter tasks by status
+- Filter tasks by priority
 
 ### Security
 
-- Password hashing using bcrypt
-- JWT token authentication
-- Protected API endpoints
-- User-specific task ownership
+- Password hashing with bcrypt
+- JWT signing and verification
+- Route protection using authentication middleware
+- User-specific task isolation (users can only access their own tasks)
+- Input validation and error handling
 
 ---
 
-## Tech Stack
+## Technology Stack
 
 ### Backend
 
@@ -42,65 +44,80 @@ This project was developed as part of the Lead Web Praxis Technical Assessment.
 - Express.js
 - MongoDB Atlas
 - Mongoose
-- JWT
+- JWT (jsonwebtoken)
 - bcrypt
 
 ### Frontend
 
 - React
 - Vite
-- Axios
 - React Router DOM
+- Axios
+
+### Development Tools
+
+- Git & GitHub
+- Postman
+
 
 ---
 
+# Prerequisites
+
+Before running the application, ensure the following are installed:
+
+- Node.js (v18 or later recommended)
+- npm
+- A free MongoDB Atlas account
+
 ---
 
-# Installation
+# Installation & Setup
 
-## Clone Repository
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/justPoly/task-manager.git
-```
-
-```
 cd task-manager
 ```
 
 ---
 
-# Backend Setup
+## 2. Backend Setup
 
-```
+Navigate to the backend folder:
+
+```bash
 cd backend
 ```
 
-Install packages
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Create
+Create a `.env` file using the provided template:
 
-```
-.env
-```
-
-from
-
-```
-.env.example
+```bash
+cp .env.example .env
 ```
 
-Run server
+Update the environment variables:
+
+```env
+PORT=3000
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_key
+```
+
+Start the backend server:
 
 ```bash
 npm run dev
 ```
 
-Backend runs on
+The backend is available at:
 
 ```
 http://localhost:3000
@@ -108,27 +125,41 @@ http://localhost:3000
 
 ---
 
-# Frontend Setup
+## 3. Frontend Setup
 
-Open another terminal
+Open a new terminal.
 
-```
+Navigate to the frontend folder:
+
+```bash
 cd frontend
 ```
 
-Install packages
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Run
+Create a `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Example:
+
+```env
+VITE_API_URL=http://localhost:3000/api
+```
+
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-Frontend runs on
+The frontend is available at:
 
 ```
 http://localhost:5173
@@ -136,23 +167,15 @@ http://localhost:5173
 
 ---
 
-# Environment Variables
+# MongoDB Setup
 
-Backend
+This project used **MongoDB Atlas**.
 
-```
-PORT=
-
-MONGO_URI=
-
-JWT_SECRET=
-```
-
-Frontend
-
-```
-VITE_API_URL=http://localhost:3000/api
-```
+1. Create a free MongoDB Atlas cluster.
+2. Create a database user.
+3. Add your current IP address under **Network Access**.
+4. Copy the Atlas connection string.
+5. Replace the value of `MONGO_URI` inside the backend `.env` file.
 
 ---
 
@@ -162,19 +185,19 @@ VITE_API_URL=http://localhost:3000/api
 
 ### Register
 
-POST
+**POST**
 
 ```
 /api/auth/register
 ```
 
-Body
+Example Request
 
 ```json
 {
-    "name":"Poly Atal",
-    "email":"poly@example.com",
-    "password":"Password123"
+    "name": "poly atal",
+    "email": "poly@example.com",
+    "password": "Password123"
 }
 ```
 
@@ -182,7 +205,7 @@ Body
 
 ### Login
 
-POST
+**POST**
 
 ```
 /api/auth/login
@@ -192,7 +215,8 @@ Returns
 
 ```json
 {
-    "token":"JWT_TOKEN"
+    "success": true,
+    "token": "JWT_TOKEN"
 }
 ```
 
@@ -200,7 +224,7 @@ Returns
 
 ### Logout
 
-POST
+**POST**
 
 ```
 /api/auth/logout
@@ -208,21 +232,17 @@ POST
 
 ---
 
-## Tasks
+## Task Endpoints
 
-Requires
+All task endpoints require the following header:
 
 ```
-Authorization
-
-Bearer JWT_TOKEN
+Authorization: Bearer JWT_TOKEN
 ```
-
----
 
 ### Create Task
 
-POST
+**POST**
 
 ```
 /api/tasks
@@ -230,23 +250,22 @@ POST
 
 ---
 
-### Get Tasks
+### Retrieve All Tasks
 
-GET
+**GET**
 
 ```
 /api/tasks
 ```
 
-Optional query parameters
+Optional query parameters:
 
 ```
 status
-
 priority
 ```
 
-Example
+Examples:
 
 ```
 /api/tasks?status=done
@@ -256,11 +275,15 @@ Example
 /api/tasks?priority=high
 ```
 
+```
+/api/tasks?status=todo&priority=medium
+```
+
 ---
 
-### Get Single Task
+### Retrieve a Single Task
 
-GET
+**GET**
 
 ```
 /api/tasks/:id
@@ -268,9 +291,9 @@ GET
 
 ---
 
-### Update Task
+### Update a Task
 
-PUT
+**PUT**
 
 ```
 /api/tasks/:id
@@ -278,16 +301,66 @@ PUT
 
 ---
 
-### Delete Task
+### Delete a Task
 
-DELETE
+**DELETE**
 
 ```
 /api/tasks/:id
 ```
+
+# API Testing
+
+The REST API was tested using **Postman**.
+
+## Authentication Flow
+
+1. Register a new user
+
+```
+POST /api/auth/register
+```
+
+2. Login
+
+```
+POST /api/auth/login
+```
+
+3. Copy the JWT token returned by the login endpoint.
+
+4. For all protected endpoints, include the token in the request headers:
+
+```
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+---
+
+## Example Protected Endpoints
+
+```
+GET /api/tasks
+POST /api/tasks
+PUT /api/tasks/:id
+DELETE /api/tasks/:id
+```
+
+---
+
+# Future Improvements
+
+- Pagination
+- Task search
+- Sorting by due date
+- Dark mode
+- Profile management
+- Token refresh mechanism
 
 ---
 
 # Author
 
-Polycarp Atalor
+**Polycarp Atalor**
+
+GitHub: https://github.com/justPoly
