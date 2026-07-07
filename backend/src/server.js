@@ -5,10 +5,20 @@ const connectDB = require("./config/db");
 
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
-connectDB();
+const startServer = async () => {
+    try {
+        // Connect to MongoDB first
+        await connectDB();
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-});
+        // Start Express server
+        app.listen(PORT, () => {
+            console.log(`🚀 Server is running on http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error("❌ Failed to start server");
+        console.error(error.message);
+        process.exit(1);
+    }
+};
+
+startServer();
