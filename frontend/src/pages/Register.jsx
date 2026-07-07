@@ -92,7 +92,8 @@ function Register() {
                 </button>
 
             </form>
-
+           
+           <br />
             <p>
                 Already have an account?
                 {" "}
