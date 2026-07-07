@@ -38,10 +38,28 @@ const createTask = async (req, res) => {
 };
 
 const getTasks = async (req, res) => {
-    res.json({
-        success: true,
-        message: "Get Tasks Endpoint"
-    });
+    try {
+
+        const tasks = await Task.find({
+            owner: req.user.id
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: tasks.length,
+            data: tasks
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
 };
 
 const getTask = async (req, res) => {
