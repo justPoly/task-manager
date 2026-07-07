@@ -18,7 +18,7 @@ router.post("/", protect, createTask);
 // Get All Tasks
 router.get("/", protect, getTasks);
 
-// Get One Task
+// Get Single Task
 router.get("/:id", protect, getTask);
 
 // Update Task

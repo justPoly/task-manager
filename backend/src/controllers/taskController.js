@@ -1,14 +1,24 @@
 const Task = require("../models/Task");
 
+// ==============================
+// Create Task
+// ==============================
+
 const createTask = async (req, res) => {
     try {
 
-        const { title, description, dueDate } = req.body;
+        const {
+            title,
+            description,
+            dueDate,
+            priority,
+            status,
+        } = req.body;
 
         if (!title) {
             return res.status(400).json({
                 success: false,
-                message: "Task title is required."
+                message: "Task title is required.",
             });
         }
 
@@ -16,13 +26,15 @@ const createTask = async (req, res) => {
             title,
             description,
             dueDate,
-            owner: req.user.id
+            priority,
+            status,
+            owner: req.user.id,
         });
 
         res.status(201).json({
             success: true,
             message: "Task created successfully.",
-            task
+            data: task,
         });
 
     } catch (error) {
@@ -31,40 +43,41 @@ const createTask = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
 
     }
 };
+
+// ==============================
+// Get All Tasks
+// ==============================
 
 const getTasks = async (req, res) => {
     try {
 
         const { status, priority } = req.query;
 
-        // Always start by filtering tasks that belong to the logged-in user
         const filter = {
-            owner: req.user.id
+            owner: req.user.id,
         };
 
-        // Add optional status filter
         if (status) {
             filter.status = status;
         }
 
-        // Add optional priority filter
         if (priority) {
             filter.priority = priority;
         }
 
         const tasks = await Task.find(filter).sort({
-            createdAt: -1
+            createdAt: -1,
         });
 
         res.status(200).json({
             success: true,
             count: tasks.length,
-            data: tasks
+            data: tasks,
         });
 
     } catch (error) {
@@ -73,30 +86,34 @@ const getTasks = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
 
     }
 };
+
+// ==============================
+// Get Single Task
+// ==============================
 
 const getTask = async (req, res) => {
     try {
 
         const task = await Task.findOne({
             _id: req.params.id,
-            owner: req.user.id
+            owner: req.user.id,
         });
 
         if (!task) {
             return res.status(404).json({
                 success: false,
-                message: "Task not found."
+                message: "Task not found.",
             });
         }
 
         res.status(200).json({
             success: true,
-            data: task
+            data: task,
         });
 
     } catch (error) {
@@ -105,42 +122,51 @@ const getTask = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
 
     }
 };
 
+// ==============================
+// Update Task
+// ==============================
+
 const updateTask = async (req, res) => {
     try {
 
-        const { title, description, status, dueDate } = req.body;
+        const {
+            title,
+            description,
+            dueDate,
+            priority,
+            status,
+        } = req.body;
 
-        // Find task that belongs to the logged-in user
         const task = await Task.findOne({
             _id: req.params.id,
-            owner: req.user.id
+            owner: req.user.id,
         });
 
         if (!task) {
             return res.status(404).json({
                 success: false,
-                message: "Task not found."
+                message: "Task not found.",
             });
         }
 
-        // Update only fields that were provided
         if (title !== undefined) task.title = title;
         if (description !== undefined) task.description = description;
-        if (status !== undefined) task.status = status;
         if (dueDate !== undefined) task.dueDate = dueDate;
+        if (priority !== undefined) task.priority = priority;
+        if (status !== undefined) task.status = status;
 
         await task.save();
 
         res.status(200).json({
             success: true,
             message: "Task updated successfully.",
-            data: task
+            data: task,
         });
 
     } catch (error) {
@@ -149,24 +175,28 @@ const updateTask = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
 
     }
 };
+
+// ==============================
+// Delete Task
+// ==============================
 
 const deleteTask = async (req, res) => {
     try {
 
         const task = await Task.findOne({
             _id: req.params.id,
-            owner: req.user.id
+            owner: req.user.id,
         });
 
         if (!task) {
             return res.status(404).json({
                 success: false,
-                message: "Task not found."
+                message: "Task not found.",
             });
         }
 
@@ -174,7 +204,7 @@ const deleteTask = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Task deleted successfully."
+            message: "Task deleted successfully.",
         });
 
     } catch (error) {
@@ -183,7 +213,7 @@ const deleteTask = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
 
     }
@@ -194,5 +224,5 @@ module.exports = {
     getTasks,
     getTask,
     updateTask,
-    deleteTask
+    deleteTask,
 };

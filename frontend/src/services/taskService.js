@@ -6,13 +6,28 @@ const getAuthHeaders = () => ({
     },
 });
 
-export const getTasks = async () => {
+export const getTasks = async (filters = {}) => {
+
+    const params = new URLSearchParams();
+
+    if (filters.status) {
+        params.append("status", filters.status);
+    }
+
+    if (filters.priority) {
+        params.append("priority", filters.priority);
+    }
+
     const response = await api.get(
-        "/tasks",
+
+        `/tasks?${params.toString()}`,
+
         getAuthHeaders()
+
     );
 
     return response.data;
+
 };
 
 export const createTask = async (task) => {
