@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-    getTasks,
-    createTask,
-    updateTask,
-    deleteTask,
-} from "../services/taskService";
+import { getTasks, createTask, updateTask, deleteTask } from "../services/taskService";
 
 function Dashboard() {
 
@@ -244,165 +239,175 @@ function Dashboard() {
 
             </div>
 
-            <form
-                onSubmit={handleSubmit}
-                className="task-form"
-            >
+            <div className="dashboard-content">
 
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Task Title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="left-panel">
 
-                <textarea
-                    name="description"
-                    placeholder="Description"
-                    value={formData.description}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="date"
-                    name="dueDate"
-                    value={formData.dueDate}
-                    onChange={handleChange}
-                />
-
-                <select
-                    name="priority"
-                    value={formData.priority}
-                    onChange={handleChange}
-                >
-                    <option value="low">
-                        Low
-                    </option>
-
-                    <option value="medium">
-                        Medium
-                    </option>
-
-                    <option value="high">
-                        High
-                    </option>
-
-                </select>
-
-                <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                >
-                    <option value="todo">
-                        Todo
-                    </option>
-
-                    <option value="in progress">
-                        In Progress
-                    </option>
-
-                    <option value="done">
-                        Done
-                    </option>
-
-                </select>
-
-                <button type="submit">
-
-                    {editingTaskId
-                        ? "Update Task"
-                        : "Create Task"}
-
-                </button>
-
-                {editingTaskId && (
-
-                    <button
-                        type="button"
-                        onClick={resetForm}
-                    >
-                        Cancel
-                    </button>
-
-                )}
-
-            </form>
-
-            <hr />
-
-            {tasks.length === 0 ? (
-
-                <p>No tasks found.</p>
-
-            ) : (
-
-                tasks.map((task) => (
-
-                    <div
-                        key={task._id}
-                        className="task-card"
+                    <form
+                        onSubmit={handleSubmit}
+                        className="task-form"
                     >
 
-                        <h3>{task.title}</h3>
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Task Title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            required
+                        />
 
-                        <p>{task.description}</p>
+                        <textarea
+                            name="description"
+                            placeholder="Description"
+                            value={formData.description}
+                            onChange={handleChange}
+                        />
 
-                        <p>
-                            <strong>Status:</strong>{" "}
-                            <span className={`status ${task.status.replace(/\s+/g, "-")}`}>
-                                {task.status}
-                            </span>
-                        </p>
+                        <input
+                            type="date"
+                            name="dueDate"
+                            value={formData.dueDate}
+                            onChange={handleChange}
+                        />
 
-                        <p>
-                            <strong>Priority:</strong>{" "}
-                            <span className={`priority ${task.priority}`}>
-                                {task.priority}
-                            </span>
-                        </p>
+                        <select
+                            name="priority"
+                            value={formData.priority}
+                            onChange={handleChange}
+                        >
+                            <option value="low">
+                                Low
+                            </option>
 
-                        <p>
+                            <option value="medium">
+                                Medium
+                            </option>
 
-                            <strong>Due:</strong>{" "}
+                            <option value="high">
+                                High
+                            </option>
 
-                            {task.dueDate
-                                ? new Date(
-                                      task.dueDate
-                                  ).toLocaleDateString()
-                                : "N/A"}
+                        </select>
 
-                        </p>
+                        <select
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                        >
+                            <option value="todo">
+                                Todo
+                            </option>
 
-                        <div className="task-actions">
+                            <option value="in progress">
+                                In Progress
+                            </option>
+
+                            <option value="done">
+                                Done
+                            </option>
+
+                        </select>
+
+                        <button type="submit">
+
+                            {editingTaskId
+                                ? "Update Task"
+                                : "Create Task"}
+
+                        </button>
+
+                        {editingTaskId && (
 
                             <button
-                                className="edit-btn"
-                                onClick={() =>
-                                    handleEdit(task)
-                                }
+                                type="button"
+                                onClick={resetForm}
                             >
-                                ✏️ Edit
+                                Cancel
                             </button>
 
-                            <button
-                                className="delete-btn"
-                                onClick={() =>
-                                    handleDelete(task._id)
-                                }
+                        )}
+
+                    </form>
+
+                </div>
+
+                <div className="right-panel">
+
+                    {tasks.length === 0 ? (
+
+                        <p>No tasks found.</p>
+
+                    ) : (
+
+                        tasks.map((task) => (
+
+                            <div
+                                key={task._id}
+                                className="task-card"
                             >
-                                🗑 Delete
-                            </button>
 
-                        </div>
+                                <h3>{task.title}</h3>
 
-                    </div>
+                                <p>{task.description}</p>
 
-                ))
+                                <p>
+                                    <strong>Status:</strong>{" "}
+                                    <span className={`status ${task.status.replace(/\s+/g, "-")}`}>
+                                        {task.status}
+                                    </span>
+                                </p>
 
-            )}
+                                <p>
+                                    <strong>Priority:</strong>{" "}
+                                    <span className={`priority ${task.priority}`}>
+                                        {task.priority}
+                                    </span>
+                                </p>
+
+                                <p>
+
+                                    <strong>Due:</strong>{" "}
+
+                                    {task.dueDate
+                                        ? new Date(
+                                              task.dueDate
+                                          ).toLocaleDateString()
+                                        : "N/A"}
+
+                                </p>
+
+                                <div className="task-actions">
+
+                                    <button
+                                        className="edit-btn"
+                                        onClick={() =>
+                                            handleEdit(task)
+                                        }
+                                    >
+                                        ✏️ Edit
+                                    </button>
+
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() =>
+                                            handleDelete(task._id)
+                                        }
+                                    >
+                                        🗑 Delete
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    )}
+
+                </div>
+
+            </div>
 
         </div>
 
