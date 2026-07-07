@@ -139,10 +139,37 @@ const updateTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-    res.json({
-        success: true,
-        message: "Delete Task Endpoint"
-    });
+    try {
+
+        const task = await Task.findOne({
+            _id: req.params.id,
+            owner: req.user.id
+        });
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found."
+            });
+        }
+
+        await task.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Task deleted successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
 };
 
 module.exports = {
