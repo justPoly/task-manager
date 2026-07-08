@@ -6,6 +6,12 @@ This project was developed as part of the **Lead Web Praxis Technical Assessment
 
 ---
 
+# Application Screenshots
+
+### Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
 ## Features
 
 ### Authentication
