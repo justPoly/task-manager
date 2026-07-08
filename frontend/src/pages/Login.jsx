@@ -56,9 +56,11 @@ function Login() {
 
     return (
 
-        <div className="container">
+        <div className="form-container">
 
             <h1>Login</h1>
+
+            <p>Sign in to manage your tasks.</p>
 
             {error && <p className="error">{error}</p>}
 

@@ -53,7 +53,7 @@ function Register() {
     };
 
     return (
-        <div className="container">
+        <div className="form-container">
 
             <h1>Create Account</h1>
 
